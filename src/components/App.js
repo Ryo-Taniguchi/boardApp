@@ -2,21 +2,35 @@ import React from 'react';
 import Form from './Form.js';
 import Todo from './Todo.js';
 
+let currentId = 0;
+
 class App extends React.Component {
     constructor(props) {
         super(props)
 
         this.state = {
-            input: ""
+            todos: [
+                
+            ]
         };
     }
     handleChange = e => {
         console.log(e.currentTarget.value)
     }
+    handleSubmit = text => {
+        const newTodo = {
+            id: currentId,
+            text,
+        }
+        // 配列を1つ１つ取り出して(this.state.todos)newTodoに代入して最後にnewTodosに格納
+        const newTodos = [...this.state.todos, newTodo]
+        this.setState({ todos : newTodos})
+        currentId++;
+    }
     render() {
         return (
             <div>
-                <Form />
+                <Form onSubmit={this.handleSubmit}/>
                 <label >
                     <input 
                         type="checkbox" 
@@ -33,15 +47,7 @@ class App extends React.Component {
                 </select>
 
                 <ul>
-                    <li>
-                        <Todo id={0} text="ヤッホ" />
-                    </li>
-                    <li>
-                        <Todo id={0} text="ハロ" />
-                    </li>
-                    <li>
-                        <Todo id={0} text="haha" />
-                    </li>
+                    {this.state.todos.map(({id, text}) => <li><Todo key={id} text={text}/></li>)}
                 </ul>
             </div>
         )
